@@ -1,2 +1,14 @@
 ###  hello word
 GET http://localhost:3000
+
+### Cadastrar aluno
+POST http://localhost:3000/alunos
+Content-Type: application/json
+
+{
+    "nome": "ana laura",
+    "endereco":"sao paulo",
+    "email": "ana@email.com",
+    "telefone": "11 9574824",
+    "anoNascimento": 2000
+}

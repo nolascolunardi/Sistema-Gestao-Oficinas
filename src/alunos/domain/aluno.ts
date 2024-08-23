@@ -1,4 +1,4 @@
-export class Alunos {
+export class Aluno {
   id: number;
   nome: string;
   endereco: string;
@@ -6,11 +6,11 @@ export class Alunos {
   email: string;
   cursos: string[];
 
-  constructor(nome: string, endereco: string, telefone: string, email: string) {
+  constructor(id: string, nome: string, endereco: string, telefone: string, email: string, cursos: string[]) {
     this.nome = nome;
     this.endereco = endereco;
     this.telefone = telefone;
     this.email = email;
-    this.cursos = [];
+    this.cursos = cursos;
   }
 }

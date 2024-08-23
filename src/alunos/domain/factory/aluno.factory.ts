@@ -4,6 +4,7 @@ import { Aluno } from '../aluno';
 
 @Injectable()
 export class AlunoFactory {
+
     criar(nome: string, endereco: string, email: string, telefone: string) {
         const alunoId = uuid();
         const alunoCurso = [];

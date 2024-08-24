@@ -4,10 +4,9 @@ import { Aluno } from '../aluno';
 
 @Injectable()
 export class AlunoFactory {
-
-    criar(nome: string, endereco: string, email: string, telefone: string) {
+    criar(nome: string, RA: string, endereco: string, email: string, telefone: string) {
         const alunoId = uuid();
         const alunoCurso = [];
-        return new Aluno(alunoId, nome, endereco, email, telefone, alunoCurso);
+        return new Aluno(alunoId, nome, RA, endereco, email, telefone, alunoCurso);
     }
 }

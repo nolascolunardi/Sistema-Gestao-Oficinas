@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AlunosService } from '../../application/alunos.service';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
+import {MatricularAlunoDto} from "./dto/matricular-aluno.dto";
 
 @Controller('alunos')
 export class AlunosController {
@@ -16,11 +17,24 @@ export class AlunosController {
 
   @Post()
   cadastrar(@Body() createAlunoDto: CreateAlunoDto) {
-    return this.alunoService.criar(createAlunoDto);
+    try {
+        return this.alunoService.criar(createAlunoDto);
+    } catch (error) {
+        return error;
+    }
   }
 
   @Get()
   listar() {
     return this.alunoService.listar();
+  }
+
+  @Post('/matricular')
+  matricular(@Body() matricularAlunoDto: MatricularAlunoDto) {
+      try {
+          return this.alunoService.matricular(matricularAlunoDto);
+      } catch (error) {
+          return error;
+      }
   }
 }

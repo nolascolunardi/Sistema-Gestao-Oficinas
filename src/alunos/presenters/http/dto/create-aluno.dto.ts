@@ -10,6 +10,10 @@ export class CreateAlunoDto {
 
   @IsNotEmpty()
   @IsString()
+  RA: string;
+
+  @IsNotEmpty()
+  @IsString()
   endereco: string;
 
   @IsNotEmpty()

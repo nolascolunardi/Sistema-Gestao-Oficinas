@@ -1,36 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCursoDto } from '../presenters/http/dto/create-curso.dto';
-import {CursoFactory} from "../domain/factory/curso.factory";
-import {CursoRepository} from "./ports/cursos.repository";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CriarCursoDto } from '../presenters/http/dto/criar-curso.dto';
+import { CursoFactory } from '../domain/factory/curso.factory';
+import { CursoRepository } from './ports/cursos.repository';
+import { Curso } from '../domain/curso';
 
 @Injectable()
 export class CursosService {
-  constructor(private readonly cursoRepository: CursoRepository, private readonly cursoFactory: CursoFactory) {}
+  constructor(
+    private readonly cursoRepository: CursoRepository,
+    private readonly cursoFactory: CursoFactory,
+  ) {}
 
-  criarCursos(createCursoDto: CreateCursoDto) {
-    if (!this.verificarCursoExistente(createCursoDto.titulo)) {
-        throw new Error('Curso já cadastrado');
-    }
-    if(!this.verificarTurmaExistente(createCursoDto.turma)){
-        throw new Error('Turma já cadastrada');
-    }
-    const curso = this.cursoFactory.criar(createCursoDto.titulo, createCursoDto.turma, createCursoDto.descricao, createCursoDto.categoria, createCursoDto.dataInicio, createCursoDto.dataFinal);
+  criar(createCursoDto: CriarCursoDto) {
+    this.verificarCursoExistente(createCursoDto.titulo);
+    const curso = this.cursoFactory.criar(createCursoDto);
     return this.cursoRepository.salvar(curso);
-
   }
 
-  verificarCursoExistente(titulo: string): boolean {
+  verificarCursoExistente(titulo: string): void {
     const cursos = this.cursoRepository.listar();
-    return !cursos.find((curso) => curso.titulo === titulo);
+    const curso = cursos.find((curso) => curso.titulo === titulo);
+    if (curso) {
+      throw new ForbiddenException('Curso já cadastrado');
+    }
   }
 
-  verificarTurmaExistente(turma: string): boolean {
-      const cursos = this.cursoRepository.listar();
-      return !cursos.find((curso) => curso.turma === turma);
-  }
-
-  listarCursos() {
+  listarTodos() {
     return this.cursoRepository.listar();
   }
 
+  async matricular(alunoRA: string, curso: Curso): Promise<Curso> {
+    if (!this.buscarPorTitulo(curso.titulo)) {
+      throw new NotFoundException('Curso não encontrado');
+    }
+
+    if (curso.alunos.length > 30) {
+      throw new ForbiddenException('Vagas esgotadas');
+    }
+
+    return this.cursoRepository.matricularAluno(alunoRA, curso);
+  }
+
+  buscarPorTitulo(titulo: string): Curso {
+    return this.cursoRepository.buscarPorTitulo(titulo);
+  }
 }

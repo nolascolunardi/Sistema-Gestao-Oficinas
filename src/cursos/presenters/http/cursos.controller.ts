@@ -1,18 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { CursosService } from '../../application/cursos.service';
-import { CreateCursoDto } from './dto/create-curso.dto';
+import { CriarCursoDto } from './dto/criar-curso.dto';
 
 @Controller('cursos')
 export class CursosController {
   constructor(private readonly cursosService: CursosService) {}
 
   @Post()
-  criar(@Body() createCursoDto: CreateCursoDto) {
-    return this.cursosService.criarCursos(createCursoDto);
+  criar(@Body() createCursoDto: CriarCursoDto) {
+    return this.cursosService.criar(createCursoDto);
   }
 
   @Get()
   listar() {
-    return this.cursosService.listarCursos();
+    return this.cursosService.listarTodos();
   }
 }
